@@ -1,3 +1,4 @@
+import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -46,7 +47,7 @@ const ThreadCard = ({
                    src={author.image}
                    alt="Profile image"
                    fill 
-                   className="cursor-pointer rounded-full"
+                   className="cursor-pointer rounded-full object-fit"
                   />
                 </Link>
 
@@ -106,7 +107,51 @@ const ThreadCard = ({
                 </div>
               </div>
             </div>
+
+            {/* TODO: Delete a thread */}
+            {/* TODO: show no of replies */}
+
           </div>
+
+            {comments.length > 0 && (
+              <div className='ml-2 flex items-center'>
+                {comments.map((comment, index) => (
+                  <Image
+                    key={index}
+                    src={comment.author.image}
+                    alt={`user_${index}`}
+                    width={28}
+                    height={28}
+                    className={`${
+                      index !== 0 && "-ml-2"
+                    } rounded-full object-cover`}
+                  />
+                ))}
+                {comments.length > 3 && (
+                  <p className='ml-1 text-subtle-medium text-gray-1'>
+                    {comments.length}+ Users 
+                  </p>
+                )}
+
+                <p className="ml-5 text-subtle-medium text-gray-1">{` ${comments.length} replies`}</p>
+              </div>
+            )}
+            {!isComment && community && (
+              <Link href={`/communities/${community.id}`} className="mt-5 flex items-center">
+                <p className="text-subtle-medium text-gray-1">
+                  {formatDateString(createdAt)}
+                  {" "} - {community.name} Community 
+                </p>
+
+                <Image 
+                 src={community.image}
+                 alt={community.name}
+                 width={14}
+                 height={14}
+                 className="ml-1 rounded-full object-cover"
+                />
+              </Link>
+            )}
         </article>
     )
 }
